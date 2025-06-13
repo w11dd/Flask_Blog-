@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Zarządzanie użytkownikami{% endblock %}
+
+{% block content %}
+{# 
+    Panel administracyjny do zarządzania użytkownikami.
+    Wyświetla listę wszystkich użytkowników z możliwością zmiany ich statusu i uprawnień administratora.
+    Zawiera informacje o ID, nazwie użytkownika, emailu i aktualnym statusie.
+#}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Zarządzanie użytkownikami</h2>
+        <a href="{{ url_for('main.admin_dashboard') }}" class="btn btn-secondary">
+            Powrót do panelu
+        </a>
+    </div>
+    
+    {# Tabela z listą użytkowników #}
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nazwa użytkownika</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Akcje</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                {# Kolumna z ID użytkownika #}
+                <td>{{ user.id }}</td>
+                
+                {# Kolumna z nazwą użytkownika #}
+                <td>{{ user.username }}</td>
+                
+                {# Kolumna z adresem email #}
+                <td>{{ user.email }}</td>
+                
+                {# Kolumna ze statusem użytkownika #}
+                <td>
+                    <span class="badge bg-{% if user.is_active %}success{% else %}danger{% endif %}">
+                        {% if user.is_active %}Aktywny{% else %}Nieaktywny{% endif %}
+                    </span>
+                    {% if user.is_admin %}
+                    <span class="badge bg-primary ms-1">Administrator</span>
+                    {% endif %}
+                </td>
+                
+                {# Kolumna z przyciskami akcji #}
+                <td>
+                    <form method="POST" 
+                          action="{{ url_for('main.toggle_user_status', user_id=user.id) }}" 
+                          class="d-inline">
+                        <input type="hidden" name="toggle_admin">
+                        <button type="submit" 
+                                class="btn btn-sm btn-{% if user.is_admin %}warning{% else %}primary{% endif %}">
+                            {% if user.is_admin %}Odbierz uprawnienia admina{% else %}Nadaj uprawnienia admina{% endif %}
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

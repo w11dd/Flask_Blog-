@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Edytuj post{% endblock %}
+
+{% block content %}
+{# 
+    Szablon formularza edycji istniejącego posta
+    Zawiera pola do edycji tytułu i treści posta
+    Wymagane zmienne:
+    - form: formularz edycji zawierający pola title i content
+#}
+<div class="container mt-5">
+    <h1>Edytuj post</h1>
+    
+    {# Formularz edycji posta #}
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        
+        {# Pole tytułu posta #}
+        <div class="mb-4">
+            {{ form.title.label(class="form-label fw-bold") }}
+            {{ form.title(class="form-control") }}
+        </div>
+        
+        {# Pole treści posta #}
+        <div class="mb-4">
+            {{ form.content.label(class="form-label fw-bold") }}
+            {{ form.content(class="form-control", rows=10) }}
+        </div>
+        
+        {# Przycisk zapisu zmian #}
+        <button type="submit" class="btn btn-primary px-4">
+            <i class="bi bi-save me-2"></i>Zapisz zmiany
+        </button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+{# 
+    Szablon formularza logowania
+    Zawiera:
+    - Formularz z polami: email, hasło
+    - Przycisk logowania
+    - Link do strony rejestracji dla nowych użytkowników
+#}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                {# Nagłówek karty logowania #}
+                <div class="card-header bg-primary text-white">
+                    <h2 class="text-center">Logowanie</h2>
+                </div>
+                
+                {# Główna zawartość formularza #}
+                <div class="card-body">
+                    <form method="POST" novalidate>
+                        {{ form.hidden_tag() }}
+                        
+                        {# Pole adresu email #}
+                        <div class="mb-3">
+                            {{ form.email.label(class="form-label") }}
+                            {{ form.email(class="form-control", placeholder="Wprowadź swój email") }}
+                            {% if form.email.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in form.email.errors %}
+                                        <i class="bi bi-exclamation-circle"></i> {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        {# Pole hasła #}
+                        <div class="mb-4">
+                            {{ form.password.label(class="form-label") }}
+                            {{ form.password(class="form-control", placeholder="Wprowadź hasło") }}
+                            {% if form.password.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in form.password.errors %}
+                                        <i class="bi bi-exclamation-circle"></i> {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        {# Przycisk submit #}
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="bi bi-box-arrow-in-right"></i> Zaloguj się
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                {# Stopka z linkiem do rejestracji #}
+                <div class="card-footer text-center bg-light">
+                    <small>Nie masz konta? <a href="{{ url_for('auth.register') }}">Zarejestruj się</a></small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

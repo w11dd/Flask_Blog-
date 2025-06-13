@@ -1,0 +1,77 @@
+{# 
+    Główny pasek nawigacyjny bloga
+    Zawiera:
+    - Logo/link do strony głównej
+    - Podstawowe linki (Wpisy, O mnie)
+    - Sekcję użytkownika (logowanie/rejestracja lub profil/wylogowanie)
+    - Panel administratora dla uprawnionych użytkowników
+#}
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+    <div class="container">
+        {# Logo strony #}
+        <a class="navbar-brand" href="{{ url_for('main.home') }}">Mój Blog</a>
+        
+        {# Przycisk mobilnego menu #}
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        {# Główne elementy menu #}
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('posts.index') }}">
+                        <i class="bi bi-journal-text"></i> Posty
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.about') }}">
+                        <i class="bi bi-info-circle"></i> O mnie
+                    </a>
+                </li>
+            </ul>
+            
+            {# Sekcja użytkownika #}
+            <ul class="navbar-nav">
+                {% if 'user_id' in session %}
+                    {# Panel administratora dla uprawnionych #}
+                    {% if 'is_admin' in session and session.is_admin %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.admin_dashboard') }}">
+                            <i class="bi bi-shield-lock"></i> Panel Admina
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    {# Profil użytkownika #}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.profile') }}">
+                            <i class="bi bi-person"></i> Mój Profil
+                        </a>
+                    </li>
+                    
+                    {# Wylogowanie #}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.logout') }}">
+                            <i class="bi bi-box-arrow-right"></i> Wyloguj się
+                        </a>
+                    </li>
+                {% else %}
+                    {# Logowanie #}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.login') }}">
+                            <i class="bi bi-box-arrow-in-right"></i> Zaloguj się
+                        </a>
+                    </li>
+                    
+                    {# Rejestracja #}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.register') }}">
+                            <i class="bi bi-person-plus"></i> Załóż konto
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

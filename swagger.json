@@ -1,0 +1,1064 @@
+{
+  "definitions": {},
+  "info": {
+    "description": "Dokumentacja API dla bloga w Flasku",
+    "termsOfService": "/tos",
+    "title": "Blog API",
+    "version": "1.0"
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "description": "Strona glowna z lista postow",
+        "responses": {
+          "200": {
+            "description": "Renderuje stronę główną",
+            "examples": {
+              "application/json": [
+                {
+                  "content": "Treść...",
+                  "id": 1,
+                  "title": "Tytuł  posta"
+                }
+              ]
+            }
+          }
+        },
+        "summary": "Wy\u015bwietla stron\u0119 g\u0142\u00f3wn\u0105 z list\u0105 post\u00f3w",
+        "tags": [
+          "Public"
+        ]
+      }
+    },
+    "/about": {
+      "get": {
+        "description": "Strona \"O mnie\"",
+        "responses": {
+          "200": {
+            "description": "Renderuje stron\u0119 \"O mnie\""
+          }
+        },
+        "summary": "Wy\u015bwietla stron\u0119 'O mnie'",
+        "tags": [
+          "Public"
+        ]
+      }
+    },
+    "/admin": {
+      "get": {
+        "description": "Panel administracyjny ze statystykami bloga",
+        "responses": {
+          "200": {
+            "description": "Renderuje panel admina"
+          },
+          "403": {
+            "description": "Brak uprawnie\u0144 administratora"
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Wy\u015bwietla panel administracyjny ze statystykami",
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/admin/comments": {
+      "get": {
+        "description": "Lista wszystkich komentarzy",
+        "responses": {
+          "200": {
+            "description": "Renderuje list\u0119 komentarzy",
+            "examples": {
+              "application/json": [
+                {
+                  "author_id": 1,
+                  "content": "Tre\u015b\u0107 komentarza",
+                  "id": 1,
+                  "post_id": 1
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "Brak uprawnie\u0144"
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Wy\u015bwietla list\u0119 wszystkich komentarzy do zarz\u0105dzania",
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/admin/comments/{comment_id}/delete": {
+      "post": {
+        "description": "Usuwa wybrany komentarz",
+        "parameters": [
+          {
+            "description": "ID komentarza do usuni\u0119cia",
+            "in": "path",
+            "name": "comment_id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Przekierowuje do listy komentarzy"
+          },
+          "403": {
+            "description": "Brak uprawnie\u0144"
+          },
+          "404": {
+            "description": "Komentarz nie istnieje"
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Usuwa wybrany komentarz",
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/admin/posts": {
+      "get": {
+        "description": "Lista wszystkich post\u00f3w",
+        "responses": {
+          "200": {
+            "description": "Renderuje list\u0119 post\u00f3w",
+            "examples": {
+              "application/json": [
+                {
+                  "author_id": 1,
+                  "content": "Tre\u015b\u0107...",
+                  "id": 1,
+                  "title": "Tytu\u0142 posta"
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "Brak uprawnie\u0144"
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Wy\u015bwietla list\u0119 wszystkich post\u00f3w do zarz\u0105dzania",
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/admin/posts/{post_id}/delete": {
+      "post": {
+        "description": "Usuwa wybrany post",
+        "parameters": [
+          {
+            "description": "ID posta do usuni\u0119cia",
+            "in": "path",
+            "name": "post_id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Przekierowuje do listy post\u00f3w"
+          },
+          "403": {
+            "description": "Brak uprawnie\u0144"
+          },
+          "404": {
+            "description": "Post nie istnieje"
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Usuwa wybrany post",
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/admin/users": {
+      "get": {
+        "description": "Lista wszystkich u\u017cytkownik\u00f3w",
+        "responses": {
+          "200": {
+            "description": "Renderuje list\u0119 u\u017cytkownik\u00f3w",
+            "examples": {
+              "application/json": [
+                {
+                  "email": "admin@example.com",
+                  "id": 1,
+                  "is_admin": true,
+                  "username": "admin"
+                },
+                {
+                  "email": "user1@example.com",
+                  "id": 2,
+                  "is_admin": false,
+                  "username": "user1"
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "Brak uprawnie\u0144"
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Wy\u015bwietla list\u0119 wszystkich u\u017cytkownik\u00f3w do zarz\u0105dzania",
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/admin/users/{user_id}/toggle": {
+      "post": {
+        "description": "Zmienia status u\u017cytkownika (aktywny/admin)",
+        "parameters": [
+          {
+            "description": "ID u\u017cytkownika",
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Je\u015bli obecny - zmienia uprawnienia admina",
+            "in": "formData",
+            "name": "toggle_admin",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Przekierowuje do listy u\u017cytkownik\u00f3w"
+          },
+          "403": {
+            "description": "Brak uprawnie\u0144 lub pr\u00f3ba modyfikacji w\u0142asnego konta"
+          },
+          "404": {
+            "description": "U\u017cytkownik nie istnieje"
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Zmienia status u\u017cytkownika (aktywny/admin)",
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/auth/admin/users": {
+      "get": {
+        "description": "Lista wszystkich u\u017cytkownik\u00f3w (tylko dla admina)",
+        "responses": {
+          "200": {
+            "description": "Lista u\u017cytkownik\u00f3w",
+            "examples": {
+              "application/json": [
+                {
+                  "email": "admin@example.com",
+                  "id": 1,
+                  "is_admin": true,
+                  "username": "admin"
+                },
+                {
+                  "email": "user1@example.com",
+                  "id": 2,
+                  "is_admin": false,
+                  "username": "user1"
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "Brak uprawnie\u0144 administratora"
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Wy\u015bwietlenie listy wszystkich u\u017cytkownik\u00f3w (tylko dla administratora)",
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/auth/login": {
+      "get": {
+        "description": "Logowanie u\u017cytkownika",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "email": {
+                  "example": "user@example.com",
+                  "type": "string"
+                },
+                "password": {
+                  "example": "haslo123",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "email",
+                "password"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logowanie udane - przekierowanie",
+            "examples": {
+              "application/json": {
+                "message": "Zalogowano pomy\u015blnie!"
+              }
+            }
+          },
+          "401": {
+            "description": "B\u0142\u0105d logowania",
+            "examples": {
+              "application/json": {
+                "error": "Nieprawid\u0142owy email lub has\u0142o"
+              }
+            }
+          }
+        },
+        "summary": "Obs\u0142uga logowania u\u017cytkownik\u00f3w",
+        "tags": [
+          "Authentication"
+        ]
+      },
+      "post": {
+        "description": "Logowanie u\u017cytkownika",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "email": {
+                  "example": "user@example.com",
+                  "type": "string"
+                },
+                "password": {
+                  "example": "haslo123",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "email",
+                "password"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logowanie udane - przekierowanie",
+            "examples": {
+              "application/json": {
+                "message": "Zalogowano pomy\u015blnie!"
+              }
+            }
+          },
+          "401": {
+            "description": "B\u0142\u0105d logowania",
+            "examples": {
+              "application/json": {
+                "error": "Nieprawid\u0142owy email lub has\u0142o"
+              }
+            }
+          }
+        },
+        "summary": "Obs\u0142uga logowania u\u017cytkownik\u00f3w",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/auth/logout": {
+      "get": {
+        "description": "Wylogowanie u\u017cytkownika",
+        "responses": {
+          "200": {
+            "description": "Wylogowano pomy\u015blnie - przekierowanie",
+            "examples": {
+              "application/json": {
+                "message": "Wylogowano pomy\u015blnie"
+              }
+            }
+          }
+        },
+        "summary": "Wylogowanie u\u017cytkownika i wyczyszczenie sesji",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/auth/profile": {
+      "get": {
+        "description": "Wy\u015bwietlenie profilu u\u017cytkownika",
+        "responses": {
+          "200": {
+            "description": "Dane profilu u\u017cytkownika",
+            "examples": {
+              "application/json": {
+                "email": "jan@example.com",
+                "is_admin": false,
+                "username": "jan_kowalski"
+              }
+            }
+          },
+          "401": {
+            "description": "U\u017cytkownik niezalogowany",
+            "examples": {
+              "application/json": {
+                "error": "Prosz\u0119 si\u0119 zalogowa\u0107"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Wy\u015bwietlenie profilu u\u017cytkownika",
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/auth/register": {
+      "get": {
+        "description": "Rejestracja nowego u\u017cytkownika",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "confirm_password": {
+                  "example": "haslo123",
+                  "type": "string"
+                },
+                "email": {
+                  "example": "jan@example.com",
+                  "type": "string"
+                },
+                "password": {
+                  "example": "haslo123",
+                  "type": "string"
+                },
+                "username": {
+                  "example": "jan_kowalski",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "username",
+                "email",
+                "password",
+                "confirm_password"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Rejestracja udana - przekierowanie",
+            "examples": {
+              "application/json": {
+                "message": "Konto zosta\u0142o utworzone!"
+              }
+            }
+          },
+          "400": {
+            "description": "B\u0142\u0105d rejestracji",
+            "examples": {
+              "application/json": {
+                "error": "Email lub nazwa u\u017cytkownika jest ju\u017c zaj\u0119ta"
+              }
+            }
+          }
+        },
+        "summary": "Rejestracja nowego u\u017cytkownika",
+        "tags": [
+          "Authentication"
+        ]
+      },
+      "post": {
+        "description": "Rejestracja nowego u\u017cytkownika",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "confirm_password": {
+                  "example": "haslo123",
+                  "type": "string"
+                },
+                "email": {
+                  "example": "jan@example.com",
+                  "type": "string"
+                },
+                "password": {
+                  "example": "haslo123",
+                  "type": "string"
+                },
+                "username": {
+                  "example": "jan_kowalski",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "username",
+                "email",
+                "password",
+                "confirm_password"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Rejestracja udana - przekierowanie",
+            "examples": {
+              "application/json": {
+                "message": "Konto zosta\u0142o utworzone!"
+              }
+            }
+          },
+          "400": {
+            "description": "B\u0142\u0105d rejestracji",
+            "examples": {
+              "application/json": {
+                "error": "Email lub nazwa u\u017cytkownika jest ju\u017c zaj\u0119ta"
+              }
+            }
+          }
+        },
+        "summary": "Rejestracja nowego u\u017cytkownika",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/posts/": {
+      "get": {
+        "description": "Wy\u015bwietla list\u0119 wszystkich post\u00f3w",
+        "responses": {
+          "200": {
+            "description": "Renderuje list\u0119 post\u00f3w",
+            "examples": {
+              "application/json": [
+                {
+                  "content": "Tre\u015b\u0107 posta...",
+                  "created_at": "2023-01-01T00:00:00Z",
+                  "id": 1,
+                  "title": "Przyk\u0142adowy post"
+                }
+              ]
+            }
+          }
+        },
+        "summary": "Wy\u015bwietla list\u0119 wszystkich post\u00f3w",
+        "tags": [
+          "Posts"
+        ]
+      }
+    },
+    "/posts/comment/{comment_id}/delete": {
+      "post": {
+        "description": "Usuwanie komentarza",
+        "parameters": [
+          {
+            "description": "ID komentarza do usuni\u0119cia",
+            "in": "path",
+            "name": "comment_id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Przekierowanie po sukcesie"
+          },
+          "403": {
+            "description": "Brak uprawnie\u0144"
+          },
+          "404": {
+            "description": "Komentarz nie istnieje"
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Usuwanie komentarza",
+        "tags": [
+          "Comments"
+        ]
+      }
+    },
+    "/posts/comment/{comment_id}/edit": {
+      "get": {
+        "description": "Edycja istniej\u0105cego komentarza",
+        "parameters": [
+          {
+            "description": "ID komentarza do edycji",
+            "in": "path",
+            "name": "comment_id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Nowa tre\u015b\u0107 komentarza",
+            "in": "formData",
+            "name": "content",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Renderuje formularz edycji"
+          },
+          "302": {
+            "description": "Przekierowanie po sukcesie"
+          },
+          "403": {
+            "description": "Brak uprawnie\u0144"
+          },
+          "404": {
+            "description": "Komentarz nie istnieje"
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Edycja istniej\u0105cego komentarza",
+        "tags": [
+          "Comments"
+        ]
+      },
+      "post": {
+        "description": "Edycja istniej\u0105cego komentarza",
+        "parameters": [
+          {
+            "description": "ID komentarza do edycji",
+            "in": "path",
+            "name": "comment_id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Nowa tre\u015b\u0107 komentarza",
+            "in": "formData",
+            "name": "content",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Renderuje formularz edycji"
+          },
+          "302": {
+            "description": "Przekierowanie po sukcesie"
+          },
+          "403": {
+            "description": "Brak uprawnie\u0144"
+          },
+          "404": {
+            "description": "Komentarz nie istnieje"
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Edycja istniej\u0105cego komentarza",
+        "tags": [
+          "Comments"
+        ]
+      }
+    },
+    "/posts/create": {
+      "get": {
+        "description": "Tworzenie nowego posta",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "content": {
+                  "example": "Tre\u015b\u0107 posta...",
+                  "type": "string"
+                },
+                "title": {
+                  "example": "Tytu\u0142 posta",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "title",
+                "content"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Renderuje formularz tworzenia posta"
+          },
+          "302": {
+            "description": "Przekierowanie po sukcesie"
+          },
+          "401": {
+            "description": "Wymagane logowanie"
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Tworzenie nowego posta",
+        "tags": [
+          "Posts"
+        ]
+      },
+      "post": {
+        "description": "Tworzenie nowego posta",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "content": {
+                  "example": "Tre\u015b\u0107 posta...",
+                  "type": "string"
+                },
+                "title": {
+                  "example": "Tytu\u0142 posta",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "title",
+                "content"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Renderuje formularz tworzenia posta"
+          },
+          "302": {
+            "description": "Przekierowanie po sukcesie"
+          },
+          "401": {
+            "description": "Wymagane logowanie"
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Tworzenie nowego posta",
+        "tags": [
+          "Posts"
+        ]
+      }
+    },
+    "/posts/delete/{post_id}": {
+      "post": {
+        "description": "Usuwanie posta",
+        "parameters": [
+          {
+            "description": "ID posta do usuni\u0119cia",
+            "in": "path",
+            "name": "post_id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Przekierowanie po sukcesie"
+          },
+          "403": {
+            "description": "Brak uprawnie\u0144"
+          },
+          "404": {
+            "description": "Post nie istnieje"
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Usuwanie posta",
+        "tags": [
+          "Posts"
+        ]
+      }
+    },
+    "/posts/edit/{post_id}": {
+      "get": {
+        "description": "Edycja istniej\u0105cego posta",
+        "parameters": [
+          {
+            "description": "ID posta do edycji",
+            "in": "path",
+            "name": "post_id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "content": {
+                  "example": "Nowa tre\u015b\u0107...",
+                  "type": "string"
+                },
+                "title": {
+                  "example": "Nowy tytu\u0142",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "title",
+                "content"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Renderuje formularz edycji"
+          },
+          "302": {
+            "description": "Przekierowanie po sukcesie"
+          },
+          "403": {
+            "description": "Brak uprawnie\u0144"
+          },
+          "404": {
+            "description": "Post nie istnieje"
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Edycja istniej\u0105cego posta",
+        "tags": [
+          "Posts"
+        ]
+      },
+      "post": {
+        "description": "Edycja istniej\u0105cego posta",
+        "parameters": [
+          {
+            "description": "ID posta do edycji",
+            "in": "path",
+            "name": "post_id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "content": {
+                  "example": "Nowa tre\u015b\u0107...",
+                  "type": "string"
+                },
+                "title": {
+                  "example": "Nowy tytu\u0142",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "title",
+                "content"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Renderuje formularz edycji"
+          },
+          "302": {
+            "description": "Przekierowanie po sukcesie"
+          },
+          "403": {
+            "description": "Brak uprawnie\u0144"
+          },
+          "404": {
+            "description": "Post nie istnieje"
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Edycja istniej\u0105cego posta",
+        "tags": [
+          "Posts"
+        ]
+      }
+    },
+    "/posts/post/{post_id}/comment": {
+      "post": {
+        "description": "Dodawanie komentarza do posta",
+        "parameters": [
+          {
+            "description": "ID posta",
+            "in": "path",
+            "name": "post_id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Tre\u015b\u0107 komentarza",
+            "in": "formData",
+            "name": "content",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Przekierowanie z powrotem do posta"
+          },
+          "400": {
+            "description": "Nieprawid\u0142owe dane formularza"
+          },
+          "401": {
+            "description": "Wymagane logowanie"
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Dodawanie komentarza do posta",
+        "tags": [
+          "Comments"
+        ]
+      }
+    },
+    "/posts/{post_id}": {
+      "get": {
+        "description": "Wy\u015bwietla szczeg\u00f3\u0142y posta z komentarzami",
+        "parameters": [
+          {
+            "description": "ID posta",
+            "in": "path",
+            "name": "post_id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Renderuje szczeg\u00f3\u0142y posta",
+            "examples": {
+              "application/json": {
+                "comments": [
+                  {
+                    "author": "Jan Kowalski",
+                    "content": "Przyk\u0142adowy komentarz",
+                    "id": 1
+                  }
+                ],
+                "content": "Tre\u015b\u0107 posta...",
+                "id": 1,
+                "title": "Tytu\u0142 posta"
+              }
+            }
+          },
+          "404": {
+            "description": "Post nie istnieje"
+          }
+        },
+        "summary": "Wy\u015bwietla szczeg\u00f3\u0142y posta z komentarzami",
+        "tags": [
+          "Posts"
+        ]
+      }
+    }
+  },
+  "swagger": "2.0"
+}

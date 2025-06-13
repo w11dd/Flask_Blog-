@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }} | My Blog{% endblock %}
+
+{% block content %}
+{# 
+    Szablon szczegółów posta z komentarzami
+    Wyświetla pełną treść posta wraz z metadanymi i funkcjami edycji
+    Zawiera sekcję komentarzy z formularzem dodawania i listą komentarzy
+    Wymagane zmienne:
+    - post: obiekt posta do wyświetlenia
+    - form: formularz dodawania komentarza (tylko dla zalogowanych użytkowników)
+#}
+<div class="container mt-5">
+    <article class="blog-post">
+        {# Nagłówek posta z metadanymi i przyciskami edycji #}
+        <div class="mb-4">
+            <h1 class="display-5 fw-bold">{{ post.title }}</h1>
+            <div class="text-muted mb-3">
+                <span class="me-3"><i class="bi bi-person"></i> {{ post.post_author.username }}</span>
+                <span><i class="bi bi-calendar"></i> {{ post.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+            </div>
+            
+            {# Przyciski edycji dla autora posta #}
+            {% if post.post_author.id == session.get('user_id') %}
+            <div class="btn-group mb-4">
+                <a href="{{ url_for('posts.edit', post_id=post.id) }}" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-pencil"></i> Edytuj
+                </a>
+                <form action="{{ url_for('posts.delete', post_id=post.id) }}" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-sm btn-outline-danger" 
+                        onclick="return confirm('Czy na pewno chcesz usunąć ten post?')">
+                        <i class="bi bi-trash"></i> Usuń
+                    </button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+
+        {# Treść posta #}
+        <div class="post-content mb-5">
+            {{ post.content|safe }}
+        </div>
+
+        {# Przycisk powrotu do listy postów #}
+        <div class="mt-5">
+            <a href="{{ url_for('posts.index') }}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Wróć do listy postów
+            </a>
+        </div>
+    </article>
+
+    {# Sekcja komentarzy #}
+    <div class="mt-5 pt-4 border-top">
+        <h3>Komentarze ({{ post.post_comments|length }})</h3>
+        
+        {# Formularz dodawania komentarza #}
+        {% if 'user_id' in session %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Dodaj komentarz</h5>
+                <form method="POST" action="{{ url_for('posts.add_comment', post_id=post.id) }}">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        {{ form.content(class="form-control", rows=4) }}
+                        {% if form.content.errors %}
+                            <div class="text-danger">
+                                {% for error in form.content.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Dodaj komentarz</button>
+                </form>
+            </div>
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            <a href="{{ url_for('auth.login') }}">Zaloguj się</a>, aby dodać komentarz.
+        </div>
+        {% endif %}
+
+        {# Lista komentarzy #}
+        {% for comment in post.comments|reverse %}
+        <div class="card mb-2">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <h6 class="card-subtitle mb-2 text-muted">
+                        {{ comment.comment_author.username }}
+                        <small>{{ comment.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                    </h6>
+                    
+                    {# Przyciski edycji komentarza #}
+                    {% if 'user_id' in session and (session['user_id'] == comment.user_id or current_user.is_admin if current_user else false) %}
+                    <div>
+                        <a href="{{ url_for('posts.edit_comment', comment_id=comment.id) }}" 
+                           class="btn btn-sm btn-outline-secondary">Edytuj</a>
+                        <form method="POST" action="{{ url_for('posts.delete_comment', comment_id=comment.id) }}" 
+                              class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-outline-danger" 
+                                    onclick="return confirm('Czy na pewno chcesz usunąć ten komentarz?')">
+                                Usuń
+                            </button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
+                <p class="card-text">{{ comment.content }}</p>
+                {% if comment.updated_at and comment.updated_at != comment.created_at %}
+                <small class="text-muted">Edytowano: {{ comment.updated_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block content %}
+{# 
+    Szablon formularza rejestracji nowego użytkownika
+    Zawiera:
+    - Formularz z polami: nazwa użytkownika, email, hasło, potwierdzenie hasła
+    - Walidację błędów dla każdego pola
+    - Link do strony logowania dla istniejących użytkowników
+#}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                {# Nagłówek karty rejestracji #}
+                <div class="card-header bg-primary text-white">
+                    <h2 class="text-center">Rejestracja konta</h2>
+                </div>
+                
+                {# Główna zawartość formularza #}
+                <div class="card-body">
+                    <form method="POST" novalidate>
+                        {{ form.hidden_tag() }}
+                        
+                        {# Pole nazwy użytkownika #}
+                        <div class="mb-3">
+                            {{ form.username.label(class="form-label") }}
+                            {{ form.username(class="form-control") }}
+                            {% if form.username.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in form.username.errors %}
+                                        <i class="bi bi-exclamation-circle"></i> {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        {# Pole adresu email #}
+                        <div class="mb-3">
+                            {{ form.email.label(class="form-label") }}
+                            {{ form.email(class="form-control", type="email") }}
+                            {% if form.email.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in form.email.errors %}
+                                        <i class="bi bi-exclamation-circle"></i> {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        {# Pole hasła #}
+                        <div class="mb-3">
+                            {{ form.password.label(class="form-label") }}
+                            {{ form.password(class="form-control") }}
+                            {% if form.password.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in form.password.errors %}
+                                        <i class="bi bi-exclamation-circle"></i> {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        {# Pole potwierdzenia hasła #}
+                        <div class="mb-4">
+                            {{ form.confirm_password.label(class="form-label") }}
+                            {{ form.confirm_password(class="form-control") }}
+                            {% if form.confirm_password.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in form.confirm_password.errors %}
+                                        <i class="bi bi-exclamation-circle"></i> {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        {# Przycisk submit #}
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="bi bi-person-plus"></i> Zarejestruj się
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                {# Stopka z linkiem do logowania #}
+                <div class="card-footer text-center bg-light">
+                    <small>Masz już konto? <a href="{{ url_for('auth.login') }}">Zaloguj się</a></small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

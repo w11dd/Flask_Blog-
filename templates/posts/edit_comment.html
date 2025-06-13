@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+{# 
+    Formularz edycji komentarza.
+    Pozwala na modyfikację treści istniejącego komentarza.
+    Zawiera walidację wprowadzanych danych oraz przyciski zapisu i anulowania.
+#}
+<div class="container mt-4">
+    <h2>Edytuj komentarz</h2>
+    
+    {# Formularz edycji komentarza #}
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        
+        {# Pole treści komentarza #}
+        <div class="form-group">
+            {{ form.content.label }}
+            {{ form.content(class="form-control") }}
+            {% if form.content.errors %}
+                <div class="invalid-feedback">
+                    {% for error in form.content.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        {# Przyciski akcji #}
+        <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
+        <a href="{{ url_for('posts.view', post_id=comment.post_id) }}" class="btn btn-secondary">Anuluj</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Strona Główna | My Blog{% endblock %}
+
+{% block content %}
+{# 
+    Główny szablon strony startowej bloga
+    Zawiera:
+    - Nagłówek z przyciskami CTA
+    - Listę postów
+    - Formularz newslettera
+    - Sekcję "O mnie"
+#}
+<div class="container">
+    {# Sekcja powitalna z przyciskami akcji #}
+    <div class="p-5 mb-4 bg-light rounded-3">
+        <div class="container-fluid py-5 text-center">
+            <h1 class="display-5 fw-bold">Witaj na moim blogu!</h1>
+            <p class="col-md-8 fs-4 mx-auto">
+                Dzielę się tutaj swoimi przemyśleniami, tutorialami i doświadczeniami z programowania.
+            </p>
+            <div class="mt-4 d-flex justify-content-center gap-3">
+                <a href="{{ url_for('posts.index') }}" class="btn btn-outline-secondary btn-lg px-4">
+                    <i class="bi bi-book"></i> Przeglądaj posty
+                </a>
+                <a href="{{ url_for('posts.create') }}" class="btn btn-primary btn-lg px-4">
+                    <i class="bi bi-plus-circle"></i> Nowy post
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {# Lista najnowszych postów #}
+    <h2 class="mb-4">Najnowsze wpisy</h2>
+    <div class="row">
+        {% for post in posts %}
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="card-title">
+                        <a href="{{ url_for('posts.view', post_id=post.id) }}" class="text-decoration-none">
+                            {{ post.title }}
+                        </a>
+                    </h3>
+                    <p class="card-text">{{ post.content|truncate(200) }}</p>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <small class="text-muted">
+                        Autor: {{ post.post_author.username }}, 
+                        Data: {{ post.created_at.strftime('%Y-%m-%d %H:%M') }}
+                    </small>
+                    <a href="{{ url_for('posts.view', post_id=post.id) }}" class="btn btn-sm btn-outline-primary float-end">
+                        Czytaj więcej
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {# Formularz zapisu do newslettera #}
+    <div class="row mt-5">
+        <div class="col-md-6 mx-auto">
+            <div class="card border-primary">
+                <div class="card-body text-center">
+                    <h3 class="card-title">Zapisz się na newsletter</h3>
+                    <p class="card-text">Otrzymuj powiadomienia o nowych wpisach i ekskluzywne treści!</p>
+                    <form class="mt-3">
+                        <div class="input-group mb-3">
+                            <input type="email" class="form-control" placeholder="Twój email" required>
+                            <button class="btn btn-primary" type="submit">Subskrybuj</button>
+                        </div>
+                        <small class="text-muted">Zero spamu. Tylko wartościowe treści.</small>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Rozbudowana sekcja "O mnie" #}
+    <div class="row mt-5 align-items-center">
+        <div class="col-md-4 text-center">
+            <img src="{{ url_for('static', filename='images/profile.jpg') }}" class="img-fluid rounded-circle shadow" alt="Mój profil" width="300">
+        </div>
+        <div class="col-md-8">
+            <h2 class="mb-3">Kilka słów o mnie</h2>
+            <p class="lead">Cześć, jestem Alexey Solopov!</p>
+            <p>estem programistą z pasją do Pythona i technologii webowych. Prowadzę tego bloga, aby dzielić się wiedzą i doświadczeniami z innymi entuzjastami programowania.</p>
+            
+            <div class="mt-4">
+                <a href="{{ url_for('main.about') }}" class="btn btn-outline-dark me-2">
+                    <i class="bi bi-person-lines-fill"></i> Moja historia
+                </a>
+                <a href="https://github.com/" class="btn btn-outline-dark me-2" target="_blank">
+                    <i class="bi bi-github"></i> GitHub
+                </a>
+                <a href="https://linkedin.com/" class="btn btn-outline-dark" target="_blank">
+                    <i class="bi bi-linkedin"></i> LinkedIn
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

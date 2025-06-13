@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+{# 
+    Formularz tworzenia nowego posta.
+    Zawiera pola na tytuł i treść posta z walidacją.
+    Umożliwia publikację nowego posta po wypełnieniu formularza.
+#}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="mb-4">Nowy post</h2>
+            
+            {# Formularz tworzenia posta #}
+            <form method="POST" action="{{ url_for('posts.create') }}">
+                {{ form.hidden_tag() }}
+                
+                {# Pole tytułu #}
+                <div class="mb-3">
+                    {{ form.title.label(class="form-label") }}
+                    {{ form.title(class="form-control") }}
+                    {% if form.title.errors %}
+                        <div class="text-danger">
+                            {% for error in form.title.errors %}
+                                <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                {# Pole treści posta #}
+                <div class="mb-3">
+                    {{ form.content.label(class="form-label") }}
+                    {{ form.content(class="form-control", rows=8) }}
+                    {% if form.content.errors %}
+                        <div class="text-danger">
+                            {% for error in form.content.errors %}
+                                <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                {# Przycisk publikacji #}
+                <button type="submit" class="btn btn-primary">Opublikuj</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

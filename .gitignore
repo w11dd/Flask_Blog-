@@ -1,0 +1,21 @@
+# Ignoruj cache Pythona
+__pycache__/
+*/__pycache__/
+*/*/__pycache__/
+*/*/*/__pycache__/
+
+# Ignoruj dokumentację (oryginał i plik tymczasowy)
+Dokumentacja Techniczna Bloga.docx
+~$kumentacja Techniczna Bloga.docx
+
+# Ignoruj środowisko i konfiguracje
+venv/
+instance/ 
+
+# Ignoruj cache testów
+.pytest_cache/
+.pytest_cache/*
+
+
+
+
