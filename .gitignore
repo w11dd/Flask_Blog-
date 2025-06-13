@@ -7,6 +7,7 @@ __pycache__/
 # Ignoruj dokumentację (oryginał i plik tymczasowy)
 Dokumentacja Techniczna Bloga.docx
 ~$kumentacja Techniczna Bloga.docx
+Dokumentacja Techniczna Bloga.pdf
 
 # Ignoruj środowisko i konfiguracje
 venv/

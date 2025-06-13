@@ -359,3 +359,66 @@ def delete_comment(comment_id):
     db.session.commit()
     flash('Komentarz został usunięty.', 'success')
     return redirect(url_for('posts.view', post_id=post_id))
+
+@posts_bp.route('/search', methods=['GET'])
+@swag_from({
+    'tags': ['Posts'],
+    'description': 'Wyszukiwanie postów',
+    'parameters': [
+        {
+            'name': 'q',
+            'in': 'query',
+            'type': 'string',
+            'required': False,
+            'description': 'Fraza do wyszukania'
+        },
+        {
+            'name': 'author',
+            'in': 'query',
+            'type': 'string',
+            'required': False,
+            'description': 'Nazwa użytkownika autora'
+        }
+    ],
+    'responses': {
+        200: {
+            'description': 'Renderuje wyniki wyszukiwania',
+            'examples': {
+                'application/json': [
+                    {
+                        'id': 1,
+                        'title': 'Znaleziony post',
+                        'content': 'Treść zawierająca szukaną frazę...',
+                        'author': 'Admin'  # Changed to match your User model
+                    }
+                ]
+            }
+        }
+    }
+})
+def search():
+    """Wyszukiwanie postów"""
+    search_query = request.args.get('q', '').strip()
+    author_query = request.args.get('author', '').strip()
+    
+    posts_query = Post.query.join(User)
+    
+    if search_query:
+        posts_query = posts_query.filter(
+            db.or_(
+                Post.title.ilike(f'%{search_query}%'),
+                Post.content.ilike(f'%{search_query}%')
+            )
+        )
+    
+    if author_query:
+        posts_query = posts_query.filter(
+            User.username.ilike(f'%{author_query}%')  # Only search by username
+        )
+    
+    posts = posts_query.order_by(Post.created_at.desc()).all()
+    
+    return render_template('posts/search_results.html', 
+                         posts=posts,
+                         search_query=search_query,
+                         author_query=author_query)

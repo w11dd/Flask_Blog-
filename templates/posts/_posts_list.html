@@ -1,0 +1,96 @@
+<!-- Formularz wyszukiwania -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form action="{{ url_for('posts.search') }}" method="GET" class="row g-3 align-items-end">
+            <div class="col-md-5">
+                <label for="searchQuery" class="form-label">Szukaj w postach</label>
+                <input type="text" id="searchQuery" name="q" class="form-control" 
+                       placeholder="Wpisz frazę..." value="{{ request.args.get('q', '') }}">
+            </div>
+            <div class="col-md-4">
+                <label for="searchAuthor" class="form-label">Filtruj po autorze</label>
+                <input type="text" id="searchAuthor" name="author" class="form-control" 
+                       placeholder="Nazwa użytkownika" value="{{ request.args.get('author', '') }}">
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-search me-2"></i> Szukaj
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Lista postów -->
+{% for post in posts %}
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+            <h5 class="card-title">
+                <a href="{{ url_for('posts.view', post_id=post.id) }}" class="text-decoration-none">
+                    {{ post.title }}
+                </a>
+                {% if post.created_at.date() == current_date %}
+                <span class="badge bg-success ms-2">Nowy</span>
+                {% endif %}
+            </h5>
+            <span class="badge bg-light text-dark">
+                <i class="bi bi-chat-left-text"></i> {{ post.comments|length }}
+            </span>
+        </div>
+        
+        <p class="card-text">{{ post.content|truncate(200) }}</p>
+        
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <div>
+                <span class="text-muted">
+                    <i class="bi bi-person"></i> {{ post.post_author.username }}
+                    <i class="bi bi-clock ms-2"></i> {{ post.created_at.strftime('%Y-%m-%d %H:%M') }}
+                </span>
+            </div>
+            <a href="{{ url_for('posts.view', post_id=post.id) }}" class="btn btn-sm btn-primary">
+                Czytaj więcej
+            </a>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info">
+    {% if request.args.get('q') or request.args.get('author') %}
+    Nie znaleziono postów spełniających kryteria wyszukiwania
+    {% else %}
+    Brak postów do wyświetlenia
+    {% endif %}
+</div>
+{% endfor %}
+
+<!-- Paginacja -->
+{% if pagination %}
+<nav aria-label="Page navigation" class="mt-4">
+    <ul class="pagination justify-content-center">
+        {% if pagination.has_prev %}
+        <li class="page-item">
+            <a class="page-link" href="{{ url_for('posts.index', page=pagination.prev_num, q=request.args.get('q'), author=request.args.get('author')) }}">
+                &laquo; Poprzednia
+            </a>
+        </li>
+        {% endif %}
+        
+        {% for page in pagination.iter_pages() %}
+        <li class="page-item {% if page == pagination.page %}active{% endif %}">
+            <a class="page-link" href="{{ url_for('posts.index', page=page, q=request.args.get('q'), author=request.args.get('author')) }}">
+                {{ page }}
+            </a>
+        </li>
+        {% endfor %}
+        
+        {% if pagination.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="{{ url_for('posts.index', page=pagination.next_num, q=request.args.get('q'), author=request.args.get('author')) }}">
+                Następna &raquo;
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}

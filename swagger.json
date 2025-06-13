@@ -9,16 +9,16 @@
   "paths": {
     "/": {
       "get": {
-        "description": "Strona glowna z lista postow",
+        "description": "Strona g\u0142\u00f3wna z list\u0105 post\u00f3w",
         "responses": {
           "200": {
-            "description": "Renderuje stronę główną",
+            "description": "Renderuje stron\u0119 g\u0142\u00f3wn\u0105",
             "examples": {
               "application/json": [
                 {
-                  "content": "Treść...",
+                  "content": "Tre\u015b\u0107...",
                   "id": 1,
-                  "title": "Tytuł  posta"
+                  "title": "Tytu\u0142 posta"
                 }
               ]
             }
@@ -1016,6 +1016,46 @@
         "summary": "Dodawanie komentarza do posta",
         "tags": [
           "Comments"
+        ]
+      }
+    },
+    "/posts/search": {
+      "get": {
+        "description": "Wyszukiwanie post\u00f3w",
+        "parameters": [
+          {
+            "description": "Fraza do wyszukania",
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "description": "Nazwa u\u017cytkownika autora",
+            "in": "query",
+            "name": "author",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Renderuje wyniki wyszukiwania",
+            "examples": {
+              "application/json": [
+                {
+                  "author": "Admin",
+                  "content": "Tre\u015b\u0107 zawieraj\u0105ca szukan\u0105 fraz\u0119...",
+                  "id": 1,
+                  "title": "Znaleziony post"
+                }
+              ]
+            }
+          }
+        },
+        "summary": "Wyszukiwanie post\u00f3w",
+        "tags": [
+          "Posts"
         ]
       }
     },

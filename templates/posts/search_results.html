@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Wyniki wyszukiwania</h2>
+
+{% if search_query or author_query %}
+<p>Wyniki dla:
+    {% if search_query %}<strong>"{{ search_query }}"</strong>{% endif %}
+    {% if search_query and author_query %} i {% endif %}
+    {% if author_query %}autora: <strong>"{{ author_query }}"</strong>{% endif %}
+</p>
+{% endif %}
+
+{% if posts %}
+    {% include "posts/_posts_list.html" %}
+{% else %}
+    <p>Nie znaleziono postów spełniających kryteria wyszukiwania.</p>
+{% endif %}
+
+<a href="{{ url_for('posts.index') }}" class="btn btn-secondary">Powrót do wszystkich postów</a>
+{% endblock %}

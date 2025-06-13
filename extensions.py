@@ -1,7 +1,30 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import humanize  # For humanize filter
 
+# Inicjalizacja rozszerzeń
 db = SQLAlchemy()
+
+def register_template_filters(app):
+    """
+    Rejestruje niestandardowe filtry szablonów w aplikacji Flask
+    
+    Dodane filtry:
+    - datetimeformat: formatuje datę do czytelnej postaci
+    - humanize: konwertuje datę na przyjazną formę (np. '5 minut temu')
+    """
+    
+    @app.template_filter('datetimeformat')
+    def datetimeformat(value, format='%Y-%m-%d %H:%M'):
+        """Formatuje obiekt datetime do stringa"""
+        if value is None:
+            return ""
+        return value.strftime(format)
+    
+    @app.template_filter('humanize')
+    def humanize_time(dt):
+        """Konwertuje datę na przyjazną formę (np. '5 minut temu')"""
+        return humanize.naturaltime(dt)
 
 def create_admin(app):
     """
@@ -9,10 +32,11 @@ def create_admin(app):
     
     Funkcja wykonuje następujące operacje:
     1. Tworzy tabele w bazie danych jeśli nie istnieją
-    2. Sprawdza czy istnieje główny administrator (ID=1)
-    3. Jeśli nie istnieje - tworzy nowego administratora
-    4. Jeśli istnieje - aktualizuje jego dane
-    5. Dodaje przykładowe posty jeśli baza jest pusta
+    2. Rejestruje filtry szablonów
+    3. Sprawdza czy istnieje główny administrator (ID=1)
+    4. Jeśli nie istnieje - tworzy nowego administratora
+    5. Jeśli istnieje - aktualizuje jego dane
+    6. Dodaje przykładowe posty jeśli baza jest pusta
     
     Zwraca:
         User: Obiekt użytkownika administratora
@@ -23,9 +47,10 @@ def create_admin(app):
     from models import User, Post
     
     try:
-        # Utworzenie tabel w bazie danych
+        # Utworzenie tabel w bazie danych i rejestracja filtrów
         with app.app_context():
             db.create_all()
+            register_template_filters(app)
 
         # Sprawdzenie czy istnieje główny administrator
         admin = User.query.get(1)

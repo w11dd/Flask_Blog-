@@ -51,12 +51,12 @@
                     <td>{{ post.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
                     
                     {# Kolumna liczby komentarzy #}
-                    <td>{{ post.post_comments|length }}</td>
+                    <td>{{ post.comments|length }}</td>
                     
                     {# Kolumna ostatniej aktywności #}
                     <td>
-                        {% if post.post_comments %}
-                            {% set last_comment = post.post_comments|sort(attribute='created_at', reverse=true)|first %}
+                        {% if post.comments %}
+                            {% set last_comment = post.comments|sort(attribute='created_at', reverse=true)|first %}
                             <small>
                                 <strong>{{ last_comment.comment_author.username }}</strong>: 
                                 {{ last_comment.content|truncate(50) }}<br>

@@ -3,6 +3,7 @@
     Zawiera:
     - Logo/link do strony głównej
     - Podstawowe linki (Wpisy, O mnie)
+    - Sekcję wyszukiwania postów
     - Sekcję użytkownika (logowanie/rejestracja lub profil/wylogowanie)
     - Panel administratora dla uprawnionych użytkowników
 #}
@@ -31,8 +32,26 @@
                 </li>
             </ul>
             
+            {# Pole wyszukiwania (widoczne tylko na dużych ekranach) #}
+            <form class="d-none d-lg-flex me-3" action="{{ url_for('posts.search') }}" method="GET" style="width: 300px;">
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control" placeholder="Szukaj postów..." 
+                           aria-label="Search posts" value="{{ request.args.get('q', '') }}">
+                    <button class="btn btn-light" type="submit">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </form>
+            
             {# Sekcja użytkownika #}
             <ul class="navbar-nav">
+                {# Wersja mobilna wyszukiwania (widoczna tylko na małych ekranach) #}
+                <li class="nav-item d-lg-none">
+                    <a class="nav-link" href="{{ url_for('posts.search') }}">
+                        <i class="bi bi-search"></i> Szukaj
+                    </a>
+                </li>
+                
                 {% if 'user_id' in session %}
                     {# Panel administratora dla uprawnionych #}
                     {% if 'is_admin' in session and session.is_admin %}
